@@ -57,6 +57,7 @@ services:
 
   cron:
     build: .
+    entrypoint: []
     command: bash -c "while true; do php /var/www/html/cron.php; sleep 60; done"
     volumes:
       - .:/var/www/html
