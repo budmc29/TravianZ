@@ -76,13 +76,6 @@ docker compose logs -f db
 
 ## Troubleshooting
 
-### Permission Issues
-If you encounter permission issues, run:
-```bash
-docker compose exec web chown -R www-data:www-data /var/www/html
-docker compose exec web chmod -R 755 /var/www/html
-```
-
 ### Database Connection Issues
 Make sure the database service is healthy before accessing the installer:
 ```bash
