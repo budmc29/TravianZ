@@ -32,9 +32,11 @@ RUN { \
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy entrypoint script
+# Copy entrypoint and utility scripts
 COPY docker-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+COPY docker-post-install.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-post-install.sh
 
 # Expose port 80
 EXPOSE 80
