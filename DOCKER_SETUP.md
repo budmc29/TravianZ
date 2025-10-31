@@ -40,11 +40,31 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
    - **Domain:** `http://localhost:8081/`
    - **Homepage:** `http://localhost:8081/`
 
+   When you reach the admin accounts step, the form will be **automatically pre-filled** with default credentials:
+   - **Multihunter password:** `admin`
+   - **Support password:** `admin`
+   - **Admin name:** `admin`
+   - **Admin email:** `admin@email.com`
+   - **Admin password:** `admin`
+
+   **IMPORTANT:** These are default development credentials. Change them immediately in production!
+
 4. **Complete the installation:**
    Follow the web installer steps to complete the setup.
 
-5. **Access your game:**
-   After installation, navigate to:
+5. **Run post-installation cleanup:**
+   After the web installation finishes, run the cleanup script:
+   ```bash
+   docker compose exec web docker-post-install.sh
+   ```
+
+   This script will:
+   - Remove/rename the install directory
+   - Set secure file permissions
+   - Configure writable directories for game operations
+
+6. **Access your game:**
+   Your game is now ready at:
    ```
    http://localhost:8081/
    ```
@@ -74,14 +94,33 @@ View database logs:
 docker compose logs -f db
 ```
 
-## Troubleshooting
+## Post-Installation Tasks
 
-### Permission Issues
-If you encounter permission issues, run:
+### Setting Up Cron Jobs (Optional)
+
+TravianZ requires cron jobs for game mechanics like resource generation, troop movements, and building construction. You can set these up in two ways:
+
+**Option 1: Using cron inside the container**
 ```bash
-docker compose exec web chown -R www-data:www-data /var/www/html
-docker compose exec web chmod -R 755 /var/www/html
+docker compose exec web bash -c 'echo "* * * * * php /var/www/html/GameEngine/cron.php" | crontab -'
 ```
+
+**Option 2: Using host cron (recommended)**
+Add to your host crontab (`crontab -e`):
+```bash
+* * * * * docker exec travianz_web_1 php /var/www/html/GameEngine/cron.php
+```
+
+### Securing the Admin Panel (Recommended)
+
+The Admin panel at `/Admin` should be protected. You can use Apache's `.htaccess` or configure authentication:
+
+```bash
+# Create .htpasswd file inside the container
+docker compose exec web htpasswd -c /var/www/html/Admin/.htpasswd admin
+```
+
+## Troubleshooting
 
 ### Database Connection Issues
 Make sure the database service is healthy before accessing the installer:
