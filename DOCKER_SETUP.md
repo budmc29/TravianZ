@@ -40,6 +40,15 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
    - **Domain:** `http://localhost:8081/`
    - **Homepage:** `http://localhost:8081/`
 
+   When you reach the admin accounts step, the form will be **automatically pre-filled** with default credentials:
+   - **Multihunter password:** `admin`
+   - **Support password:** `admin`
+   - **Admin name:** `admin`
+   - **Admin email:** `admin@email.com`
+   - **Admin password:** `admin`
+
+   **IMPORTANT:** These are default development credentials. Change them immediately in production!
+
 4. **Complete the installation:**
    Follow the web installer steps to complete the setup.
 

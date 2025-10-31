@@ -7,12 +7,13 @@ set -e
 # Set proper ownership and permissions for directories that need write access
 echo "Setting file permissions..."
 
-# Directories that need write access
-chown -R www-data:www-data /var/www/html/install
-chown -R www-data:www-data /var/www/html/var
-chown -R www-data:www-data /var/www/html/GameEngine
+# The parent directory needs to be owned by www-data for renaming install/
+chown -R www-data:www-data /var/www/html
 
-# Make install directory writable (needed to rename it after installation)
+# Make parent directory writable (needed to rename install/ directory after installation)
+chmod 775 /var/www/html
+
+# Make install directory writable
 chmod -R 775 /var/www/html/install
 
 # Make var directory writable (needed for installed marker file and other runtime files)
