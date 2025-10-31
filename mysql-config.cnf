@@ -1,0 +1,30 @@
+[mysqld]
+# Performance tuning for TravianZ (MySQL 8.0)
+# Adjust these based on available system resources
+
+# Memory settings
+innodb_buffer_pool_size = 1G
+innodb_log_buffer_size = 16M
+
+# Connection settings
+max_connections = 200
+thread_cache_size = 50
+
+# Table cache
+table_open_cache = 2000
+table_definition_cache = 1400
+
+# Temp tables
+tmp_table_size = 64M
+max_heap_table_size = 64M
+
+# InnoDB settings
+innodb_flush_log_at_trx_commit = 2
+innodb_flush_method = O_DIRECT
+innodb_file_per_table = 1
+
+# Redo log capacity (replaces deprecated innodb_log_file_size in MySQL 8.0)
+innodb_redo_log_capacity = 512M
+
+# Logging (disable in production for better performance)
+slow_query_log = 0
