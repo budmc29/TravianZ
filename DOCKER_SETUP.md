@@ -11,7 +11,7 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
 
 1. **Start the application:**
    ```bash
-   docker compose up -d
+   docker-compose up -d
    ```
 
 2. **Access the installer:**
@@ -55,7 +55,7 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
 5. **Run post-installation cleanup:**
    After the web installation finishes, run the cleanup script:
    ```bash
-   docker compose exec web docker-post-install.sh
+   docker-compose exec web docker-post-install.sh
    ```
 
    This script will:
@@ -72,26 +72,26 @@ This Docker Compose setup allows you to run TravianZ without installing PHP, MyS
 ## Stopping the Application
 
 ```bash
-docker compose down
+docker-compose down
 ```
 
 ## Stopping and Removing Data
 
 To stop the application and remove all data (including the database):
 ```bash
-docker compose down -v
+docker-compose down -v
 ```
 
 ## Logs
 
 View web server logs:
 ```bash
-docker compose logs -f web
+docker-compose logs -f web
 ```
 
 View database logs:
 ```bash
-docker compose logs -f db
+docker-compose logs -f db
 ```
 
 ## Post-Installation Tasks
@@ -112,21 +112,21 @@ TravianZ uses a hybrid automation system:
 
 **Note about resources**: Village resources are calculated on-demand based on production rates and time elapsed. They don't need active generation.
 
-**The cron container starts automatically** when you run `docker compose up -d`. No manual setup required!
+**The cron container starts automatically** when you run `docker-compose up -d`. No manual setup required!
 
 **Verify automation is working:**
 ```bash
 # Check cron container is running
-docker compose ps cron
+docker-compose ps cron
 
 # View cron logs
-docker compose logs -f cron
+docker-compose logs -f cron
 # Should show: Cron completed at [timestamp] every 60 seconds
 ```
 
 **Manual test:**
 ```bash
-docker compose exec web php /var/www/html/cron.php
+docker-compose exec web php /var/www/html/cron.php
 # Should output: Cron completed at [timestamp]
 ```
 
@@ -136,7 +136,7 @@ The Admin panel at `/Admin` should be protected. You can use Apache's `.htaccess
 
 ```bash
 # Create .htpasswd file inside the container
-docker compose exec web htpasswd -c /var/www/html/Admin/.htpasswd admin
+docker-compose exec web htpasswd -c /var/www/html/Admin/.htpasswd admin
 ```
 
 ## Troubleshooting
@@ -144,16 +144,16 @@ docker compose exec web htpasswd -c /var/www/html/Admin/.htpasswd admin
 ### Database Connection Issues
 Make sure the database service is healthy before accessing the installer:
 ```bash
-docker compose ps
+docker-compose ps
 ```
 
 The `db` service should show as "healthy" in the status.
 
 ### Reinstalling
 To reinstall from scratch:
-1. Stop the containers: `docker compose down -v`
+1. Stop the containers: `docker-compose down -v`
 2. Remove the `var/installed` file if it exists
-3. Start again: `docker compose up -d`
+3. Start again: `docker-compose up -d`
 
 ## Ports
 
