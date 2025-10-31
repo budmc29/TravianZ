@@ -27,12 +27,5 @@ chmod -R 775 /var/www/html/GameEngine
 
 echo "Permissions set successfully"
 
-# Set up cron job for game automation (run as www-data user via su)
-(crontab -l 2>/dev/null || true; echo "* * * * * su -s /bin/sh www-data -c 'php /var/www/html/cron.php >> /var/log/travianz-cron.log 2>&1'") | crontab -
-
-# Start cron in background
-echo "Starting cron service..."
-cron
-
 # Execute the original docker-php-entrypoint with apache
 exec docker-php-entrypoint apache2-foreground

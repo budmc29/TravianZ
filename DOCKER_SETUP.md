@@ -96,13 +96,13 @@ docker compose logs -f db
 
 ## Post-Installation Tasks
 
-### Setting Up Cron Jobs (Recommended)
+### Game Automation (Automatic)
 
 TravianZ uses a hybrid automation system:
 - **When players are online**: JavaScript automatically triggers game automation every 30 seconds
-- **When no players are online**: Without cron, the game "pauses" until someone logs in
+- **When no players are online**: A dedicated cron container runs automation every 60 seconds
 
-**Why you need cron**: To keep the game world running 24/7 even when no players are online. Cron handles:
+**What the cron container does**: Keeps the game world running 24/7. It processes:
 - Building construction completion
 - Troop training and movement completion
 - Market trade completion
@@ -110,33 +110,23 @@ TravianZ uses a hybrid automation system:
 - Troop spawning and battles
 - Other time-based game mechanics
 
-**Note about resources**: Village resources are calculated on-demand based on production rates and time elapsed. They don't need active cron generation.
+**Note about resources**: Village resources are calculated on-demand based on production rates and time elapsed. They don't need active generation.
 
-**Setup host cron (recommended):**
+**The cron container starts automatically** when you run `docker compose up -d`. No manual setup required!
 
-Add to your host crontab (`crontab -e`):
+**Verify automation is working:**
 ```bash
-* * * * * docker-compose -f /full/path/to/docker-compose.yml exec -T web php /var/www/html/cron.php >> /tmp/travianz-cron.log 2>&1
-```
+# Check cron container is running
+docker compose ps cron
 
-For example, if your TravianZ is in `/home/theo/work/TravianZ`:
-```bash
-* * * * * docker-compose -f /home/theo/work/TravianZ/docker-compose.yml exec -T web php /var/www/html/cron.php >> /tmp/travianz-cron.log 2>&1
-```
-
-**Verify cron is working:**
-```bash
-# Wait a minute after adding to crontab, then check:
-cat /tmp/travianz-cron.log
-# Should show: Cron completed at [timestamp]
-
-# Or watch it in real-time:
-tail -f /tmp/travianz-cron.log
+# View cron logs
+docker compose logs -f cron
+# Should show: Cron completed at [timestamp] every 60 seconds
 ```
 
 **Manual test:**
 ```bash
-docker-compose exec -T web php /var/www/html/cron.php
+docker compose exec web php /var/www/html/cron.php
 # Should output: Cron completed at [timestamp]
 ```
 

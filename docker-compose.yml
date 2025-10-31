@@ -55,6 +55,31 @@ services:
           cpus: '0.5'
           memory: 512M
 
+  cron:
+    build: .
+    command: bash -c "while true; do php /var/www/html/cron.php; sleep 60; done"
+    volumes:
+      - .:/var/www/html
+    environment:
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=travianz
+      - DB_PASSWORD=travianz_pass
+      - DB_NAME=travianz
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - travianz-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+
 volumes:
   db-data:
 
